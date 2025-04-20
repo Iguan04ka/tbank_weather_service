@@ -1,4 +1,4 @@
-package ru.iguana.weatherService;
+package ru.iguana.weatherService.model;
 
 import java.util.Random;
 

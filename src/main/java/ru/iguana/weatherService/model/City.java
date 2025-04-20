@@ -1,4 +1,4 @@
-package ru.iguana.weatherService;
+package ru.iguana.weatherService.model;
 
 import ru.iguana.weatherService.exeptions.IllegalCityNameException;
 
@@ -16,10 +16,7 @@ public class City {
     }
 
     private boolean validateCityName(String cityName){
-        if (cityName == null || cityName.trim().isEmpty() || !cityName.matches("[А-Яа-яЁё\\s-]+")) {
-            return false;
-        }
-        return true;
+        return cityName != null && !cityName.trim().isEmpty() && cityName.matches("[А-Яа-яЁё\\s-]+");
     }
 
     public String getCityName() {
@@ -34,6 +31,7 @@ public class City {
         if (validateCityName(cityName)) {
             this.cityName = cityName;
         }
+        else throw new IllegalCityNameException(cityName);
     }
 
     public void setWeather(Weather weather) {
