@@ -23,7 +23,8 @@ public class WeatherApp {
             System.out.println("\nВведите число:\n" +
                     "0 - выход\n" +
                     "1 - узнать погоду в городе\n" +
-                    "2 - показать погоду во всех сохранённых городах");
+                    "2 - показать погоду во всех сохранённых городах\n" +
+                    "3 - удалить город");
             short option = scanner.nextShort();
 
             switch (option) {
@@ -58,6 +59,21 @@ public class WeatherApp {
                 case 2 -> {
                     for (City city : service.findAll()) {
                         System.out.println("Погода в городе " + city);
+                    }
+                }
+
+                case 3 -> {
+                    System.out.println("Введите название города для удаления:");
+                    scanner.nextLine();
+
+                    String cityName = scanner.nextLine();
+
+                    try {
+                        service.delete(cityName);
+                        System.out.println("Город \"" + cityName + "\" успешно удалён.");
+                    }
+                    catch (CityNotFoundException e) {
+                        System.out.println("Ошибка: " + e.getMessage());
                     }
                 }
 
