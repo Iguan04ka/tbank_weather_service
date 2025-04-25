@@ -1,13 +1,14 @@
 package ru.iguana.weatherService.app;
 
+import ru.iguana.weatherService.data.ConnectionData;
 import ru.iguana.weatherService.data.LiquibaseChangelogLoader;
 import ru.iguana.weatherService.data.WeatherRepository;
 import ru.iguana.weatherService.data.impl.WeatherRepositoryImpl;
-import ru.iguana.weatherService.exeptions.CityNotFoundException;
-import ru.iguana.weatherService.exeptions.IllegalCityNameException;
+import ru.iguana.weatherService.exceptions.CityNotFoundException;
+import ru.iguana.weatherService.exceptions.IllegalCityNameException;
 import ru.iguana.weatherService.model.City;
 import ru.iguana.weatherService.service.WeatherService;
-import ru.iguana.weatherService.service.WeatherServiceImpl;
+import ru.iguana.weatherService.service.impl.WeatherServiceImpl;
 
 import java.util.Scanner;
 
@@ -15,7 +16,11 @@ public class WeatherApp {
     public static void main(String[] args) {
         LiquibaseChangelogLoader.load();
 
-        WeatherRepository weatherRepository = new WeatherRepositoryImpl();
+        ConnectionData connectionData = new ConnectionData(
+                "jdbc:postgresql://localhost:5433/Weather",
+                "iguana",
+                "postgres");
+        WeatherRepository weatherRepository = new WeatherRepositoryImpl(connectionData);
         WeatherService service = new WeatherServiceImpl(weatherRepository);
 
         Scanner scanner = new Scanner(System.in);
@@ -47,7 +52,7 @@ public class WeatherApp {
                         try {
                             city = service.findOneByName(cityName);
                         }
-                        catch (CityNotFoundException e) {
+                        catch (IllegalArgumentException e) {
                             service.create(cityName);
                             city = service.findOneByName(cityName);
                         }

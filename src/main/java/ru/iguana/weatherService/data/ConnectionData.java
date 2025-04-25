@@ -1,13 +1,13 @@
 package ru.iguana.weatherService.data;
 
-public class DatabaseConnection {
+public class ConnectionData {
     private final String url;
 
     private final String user;
 
     private final String password;
 
-    public DatabaseConnection(String url, String user, String password) {
+    public ConnectionData(String url, String user, String password) {
         this.url = url;
         this.user = user;
         this.password = password;
