@@ -1,7 +1,8 @@
 package ru.iguana.weatherService.app;
 
+import ru.iguana.weatherService.data.LiquibaseChangelogLoader;
 import ru.iguana.weatherService.data.WeatherRepository;
-import ru.iguana.weatherService.data.WeatherRepositoryImpl;
+import ru.iguana.weatherService.data.impl.WeatherRepositoryImpl;
 import ru.iguana.weatherService.exeptions.CityNotFoundException;
 import ru.iguana.weatherService.exeptions.IllegalCityNameException;
 import ru.iguana.weatherService.model.City;
@@ -12,6 +13,8 @@ import java.util.Scanner;
 
 public class WeatherApp {
     public static void main(String[] args) {
+        LiquibaseChangelogLoader.load();
+
         WeatherRepository weatherRepository = new WeatherRepositoryImpl();
         WeatherService service = new WeatherServiceImpl(weatherRepository);
 

@@ -1,5 +1,6 @@
-package ru.iguana.weatherService.data;
+package ru.iguana.weatherService.data.impl;
 
+import ru.iguana.weatherService.data.WeatherRepository;
 import ru.iguana.weatherService.model.City;
 
 import java.util.*;
