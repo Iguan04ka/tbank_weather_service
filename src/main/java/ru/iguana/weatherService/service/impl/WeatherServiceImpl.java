@@ -1,13 +1,12 @@
-package ru.iguana.weatherService.service;
+package ru.iguana.weatherService.service.impl;
 
 import ru.iguana.weatherService.data.WeatherRepository;
-import ru.iguana.weatherService.exeptions.CityNotFoundException;
 import ru.iguana.weatherService.model.City;
+import ru.iguana.weatherService.service.WeatherService;
 
 import java.util.Collection;
 
 public class WeatherServiceImpl implements WeatherService {
-
     private final WeatherRepository repository;
 
     public WeatherServiceImpl(WeatherRepository repository) {
@@ -22,18 +21,16 @@ public class WeatherServiceImpl implements WeatherService {
     @Override
     public City findOneByName(String name) {
         return repository.findOneByName(name)
-                .orElseThrow(() -> new CityNotFoundException(name));
+                .orElseThrow(() -> new IllegalArgumentException("City not found: " + name));
     }
 
     @Override
     public void create(String name) {
-        City city = new City(name);
-        repository.save(city);
+        repository.save(new City(name));
     }
 
     @Override
     public void delete(String name) {
-        City city = findOneByName(name);
-        repository.delete(city);
+        repository.delete(new City(name));
     }
 }

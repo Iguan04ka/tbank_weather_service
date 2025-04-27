@@ -1,18 +1,29 @@
 package ru.iguana.weatherService.app;
 
+import ru.iguana.weatherService.data.ConnectionData;
+import ru.iguana.weatherService.data.LiquibaseChangelogLoader;
 import ru.iguana.weatherService.data.WeatherRepository;
-import ru.iguana.weatherService.data.WeatherRepositoryImpl;
-import ru.iguana.weatherService.exeptions.CityNotFoundException;
-import ru.iguana.weatherService.exeptions.IllegalCityNameException;
+import ru.iguana.weatherService.data.impl.WeatherRepositoryImpl;
+import ru.iguana.weatherService.exceptions.CityNotFoundException;
+import ru.iguana.weatherService.exceptions.IllegalCityNameException;
 import ru.iguana.weatherService.model.City;
 import ru.iguana.weatherService.service.WeatherService;
-import ru.iguana.weatherService.service.WeatherServiceImpl;
+import ru.iguana.weatherService.service.impl.WeatherServiceImpl;
 
 import java.util.Scanner;
 
 public class WeatherApp {
     public static void main(String[] args) {
-        WeatherRepository weatherRepository = new WeatherRepositoryImpl();
+
+        ConnectionData connectionData = new ConnectionData(
+                "jdbc:postgresql://localhost:5433/Weather",
+                "iguana",
+                "postgres");
+
+        LiquibaseChangelogLoader liquibaseChangelogLoader = new LiquibaseChangelogLoader(connectionData);
+        liquibaseChangelogLoader.load();
+
+        WeatherRepository weatherRepository = new WeatherRepositoryImpl(connectionData);
         WeatherService service = new WeatherServiceImpl(weatherRepository);
 
         Scanner scanner = new Scanner(System.in);
@@ -44,7 +55,7 @@ public class WeatherApp {
                         try {
                             city = service.findOneByName(cityName);
                         }
-                        catch (CityNotFoundException e) {
+                        catch (IllegalArgumentException e) {
                             service.create(cityName);
                             city = service.findOneByName(cityName);
                         }
@@ -52,7 +63,7 @@ public class WeatherApp {
                         System.out.println("Погода в городе " + city);
                     }
                     catch (IllegalCityNameException e) {
-                        System.out.println(e.getMessage());
+                        System.err.println(e.getMessage());
                     }
                 }
 
@@ -73,11 +84,11 @@ public class WeatherApp {
                         System.out.println("Город \"" + cityName + "\" успешно удалён.");
                     }
                     catch (CityNotFoundException e) {
-                        System.out.println("Ошибка: " + e.getMessage());
+                        System.err.println("Ошибка: " + e.getMessage());
                     }
                 }
 
-                default -> System.out.println("Неверный ввод. Пожалуйста, введите 0, 1 или 2.");
+                default -> System.out.println("Неверный ввод. Пожалуйста, введите 0, 1, 2 или 3.");
             }
         }
 

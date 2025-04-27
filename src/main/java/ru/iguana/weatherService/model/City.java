@@ -1,6 +1,6 @@
 package ru.iguana.weatherService.model;
 
-import ru.iguana.weatherService.exeptions.IllegalCityNameException;
+import ru.iguana.weatherService.exceptions.IllegalCityNameException;
 
 public class City {
     private String cityName;

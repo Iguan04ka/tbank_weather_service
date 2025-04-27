@@ -1,4 +1,4 @@
-package ru.iguana.weatherService.exeptions;
+package ru.iguana.weatherService.exceptions;
 
 public class IllegalCityNameException extends RuntimeException {
     public IllegalCityNameException(String cityName) {

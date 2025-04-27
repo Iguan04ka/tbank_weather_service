@@ -11,7 +11,7 @@ public interface WeatherRepository {
 
     Optional<City> findOneByName(String name);
 
-    City save(City city);
+    void save(City city);
 
-    long delete(City city);
+    void delete(City city);
 }
