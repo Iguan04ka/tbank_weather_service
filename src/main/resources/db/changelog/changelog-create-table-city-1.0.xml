@@ -7,7 +7,7 @@
 
     <changeSet id="create-city" author="iguan04ka">
 
-        <preConditions onFail="MARK_RAN">
+        <preConditions onFail="CONTINUE">
             <not>
                 <tableExists tableName="city"/>
             </not>

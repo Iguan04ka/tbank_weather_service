@@ -14,12 +14,15 @@ import java.util.Scanner;
 
 public class WeatherApp {
     public static void main(String[] args) {
-        LiquibaseChangelogLoader.load();
 
         ConnectionData connectionData = new ConnectionData(
                 "jdbc:postgresql://localhost:5433/Weather",
                 "iguana",
                 "postgres");
+
+        LiquibaseChangelogLoader liquibaseChangelogLoader = new LiquibaseChangelogLoader(connectionData);
+        liquibaseChangelogLoader.load();
+
         WeatherRepository weatherRepository = new WeatherRepositoryImpl(connectionData);
         WeatherService service = new WeatherServiceImpl(weatherRepository);
 
@@ -60,7 +63,7 @@ public class WeatherApp {
                         System.out.println("Погода в городе " + city);
                     }
                     catch (IllegalCityNameException e) {
-                        System.out.println(e.getMessage());
+                        System.err.println(e.getMessage());
                     }
                 }
 
@@ -81,11 +84,11 @@ public class WeatherApp {
                         System.out.println("Город \"" + cityName + "\" успешно удалён.");
                     }
                     catch (CityNotFoundException e) {
-                        System.out.println("Ошибка: " + e.getMessage());
+                        System.err.println("Ошибка: " + e.getMessage());
                     }
                 }
 
-                default -> System.out.println("Неверный ввод. Пожалуйста, введите 0, 1 или 2.");
+                default -> System.out.println("Неверный ввод. Пожалуйста, введите 0, 1, 2 или 3.");
             }
         }
 

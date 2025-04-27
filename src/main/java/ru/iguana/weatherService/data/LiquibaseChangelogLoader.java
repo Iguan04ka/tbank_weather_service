@@ -12,10 +12,16 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class LiquibaseChangelogLoader {
-    public static void load() {
-        String url = "jdbc:postgresql://localhost:5433/Weather";
-        String username = "iguana";
-        String password = "postgres";
+
+    private final ConnectionData connectionData;
+    public LiquibaseChangelogLoader(ConnectionData connectionData) {
+        this.connectionData = connectionData;
+    }
+
+    public void load() {
+        String url = connectionData.getUrl();
+        String username = connectionData.getUser();
+        String password = connectionData.getPassword();
 
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             Database database = DatabaseFactory.getInstance()

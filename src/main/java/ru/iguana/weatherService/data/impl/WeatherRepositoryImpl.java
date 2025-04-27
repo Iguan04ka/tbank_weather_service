@@ -41,7 +41,7 @@ public class WeatherRepositoryImpl implements WeatherRepository {
     public void save(City city) {
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection(connectionData.getUrl(), connectionData.getUser(), connectionData.getPassword());
+            conn = getConnection(connectionData);
             conn.setAutoCommit(false);
 
             int cityId = getOrCreateCityId(conn, city.getCityName());
@@ -112,7 +112,7 @@ public class WeatherRepositoryImpl implements WeatherRepository {
 
     private Collection<City> getCitiesFromQuery(String sql) {
         Collection<City> cities = new ArrayList<>();
-        try (Connection conn = DriverManager.getConnection(connectionData.getUrl(), connectionData.getUser(), connectionData.getPassword());
+        try (Connection conn = getConnection(connectionData);
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -126,7 +126,7 @@ public class WeatherRepositoryImpl implements WeatherRepository {
     }
 
     private Optional<City> getCityFromQuery(String sql, String name) {
-        try (Connection conn = DriverManager.getConnection(connectionData.getUrl(), connectionData.getUser(), connectionData.getPassword());
+        try (Connection conn = getConnection(connectionData);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, name);
@@ -139,7 +139,7 @@ public class WeatherRepositoryImpl implements WeatherRepository {
     }
 
     private void executeUpdate(String sql, String param) {
-        try (Connection conn = DriverManager.getConnection(connectionData.getUrl(), connectionData.getUser(), connectionData.getPassword());
+        try (Connection conn = getConnection(connectionData);
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, param);
@@ -180,5 +180,8 @@ public class WeatherRepositoryImpl implements WeatherRepository {
                 e.printStackTrace();
             }
         }
+    }
+    private Connection getConnection(ConnectionData connectionData) throws SQLException {
+        return DriverManager.getConnection(connectionData.getUrl(), connectionData.getUser(), connectionData.getPassword());
     }
 }

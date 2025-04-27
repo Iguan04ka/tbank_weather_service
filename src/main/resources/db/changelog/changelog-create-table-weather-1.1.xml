@@ -7,7 +7,7 @@
 
     <changeSet id="create-weather" author="iguan04ka">
 
-    <preConditions onFail="MARK_RAN">
+    <preConditions onFail="CONTINUE">
         <not>
             <tableExists tableName="weather"/>
         </not>
